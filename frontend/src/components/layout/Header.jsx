@@ -19,6 +19,12 @@ const Header = () => {
               </p>
             </div>
           </div>
+          <div className="hidden md:flex items-center space-x-6">
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <TrendingUp className="w-4 h-4" />
+              <span>Powered by Torre.ai</span>
+            </div>
+          </div>
         </div>
       </div>
     </header>
