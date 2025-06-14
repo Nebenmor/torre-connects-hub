@@ -8,7 +8,7 @@ const ErrorMessage = ({ error }) => (
   </div>
 );
 
-const NoResults = ({ query }) => (
+const NoResults = () => (
   <div className="text-center py-12">
     <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
       <Search className="w-8 h-8 text-gray-400" />

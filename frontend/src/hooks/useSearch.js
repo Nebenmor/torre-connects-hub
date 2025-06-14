@@ -6,12 +6,11 @@ import { TorreApiService } from "../services/api/torreApi";
  * Custom hook for search functionality
  * @returns {Object} Search state and handlers
  */
-export const useSearch = () => {
+const useSearch = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const debouncedQuery = useDebounce(query, 500);
 
   const performSearch = useCallback(async (searchQuery) => {
@@ -60,3 +59,5 @@ export const useSearch = () => {
     refetchResults,
   };
 };
+
+export { useSearch };
