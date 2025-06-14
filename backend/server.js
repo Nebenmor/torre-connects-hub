@@ -7,6 +7,9 @@ const rateLimit = require("express-rate-limit");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Backend API base URL
+const BACKEND_API_URL = "https://torre-connects-hub-backend.vercel.app";
+
 // Middleware
 app.use(
   cors({
@@ -41,7 +44,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Search endpoint - proxies Torre.ai search stream
+// Search endpoint - proxies Torre Connect Hub backend
 app.post("/api/search", async (req, res) => {
   try {
     console.log("Search request received:", req.body);
@@ -55,7 +58,7 @@ app.post("/api/search", async (req, res) => {
     };
 
     const response = await axios.post(
-      "https://torre.ai/api/entities/_searchStream",
+      `${BACKEND_API_URL}/api/search`,
       searchPayload,
       {
         headers: {
@@ -66,13 +69,13 @@ app.post("/api/search", async (req, res) => {
       }
     );
 
-    console.log("Torre.ai search response status:", response.status);
+    console.log("Backend search response status:", response.status);
     res.json(response.data);
   } catch (error) {
     console.error("Search error:", error.message);
 
     if (error.response) {
-      // Torre.ai returned an error
+      // Backend returned an error
       res.status(error.response.status).json({
         error: "Search service error",
         message: error.response.data?.message || "Failed to search",
@@ -112,7 +115,7 @@ app.get("/api/genome/:username", async (req, res) => {
     console.log(`Fetching genome for username: ${username}`);
 
     const response = await axios.get(
-      `https://torre.ai/api/genome/bios/${username}`,
+      `${BACKEND_API_URL}/api/genome/${username}`,
       {
         headers: {
           "User-Agent": "Torre-Connect-Hub/1.0",
@@ -156,24 +159,48 @@ app.get("/api/genome/:username", async (req, res) => {
   }
 });
 
-// Job search endpoint (bonus feature)
+// Job search endpoint
 app.post("/api/jobs/search", async (req, res) => {
   try {
     console.log("Job search request received:", req.body);
 
-    // This would integrate with Torre's job search API
-    // For now, return a placeholder response
-    res.json({
-      message: "Job search endpoint ready for integration",
-      query: req.body.query,
-      timestamp: new Date().toISOString(),
-    });
+    const response = await axios.post(
+      `${BACKEND_API_URL}/api/jobs/search`,
+      req.body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "Torre-Connect-Hub/1.0",
+        },
+        timeout: 10000,
+      }
+    );
+
+    console.log("Job search response status:", response.status);
+    res.json(response.data);
   } catch (error) {
     console.error("Job search error:", error.message);
-    res.status(500).json({
-      error: "Job search error",
-      message: error.message,
-    });
+
+    if (error.response) {
+      res.status(error.response.status).json({
+        error: "Job search service error",
+        message: error.response.data?.message || "Failed to search jobs",
+        details:
+          process.env.NODE_ENV === "development"
+            ? error.response.data
+            : undefined,
+      });
+    } else if (error.request) {
+      res.status(503).json({
+        error: "Service temporarily unavailable",
+        message: "Unable to connect to job search service",
+      });
+    } else {
+      res.status(500).json({
+        error: "Internal server error",
+        message: "Something went wrong with job search",
+      });
+    }
   }
 });
 
@@ -204,6 +231,9 @@ app.listen(PORT, () => {
   console.log(`🔍 Search endpoint: http://localhost:${PORT}/api/search`);
   console.log(
     `👤 Genome endpoint: http://localhost:${PORT}/api/genome/:username`
+  );
+  console.log(
+    `💼 Job search endpoint: http://localhost:${PORT}/api/jobs/search`
   );
 });
 
