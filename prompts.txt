@@ -1,0 +1,21 @@
+Tool: Cursor 
+Model: Claude-3.5-Sonnet 
+Prompt: Redesign the user profile card component to display professional information more clearly. Include sections for skills, experience level, and availability status. Use a clean, modern layout with proper spacing and typography hierarchy.
+
+
+Tool: VS Code 
+Model: ChatGPT-4 
+Prompt: Create a responsive navigation menu for the Torre Connect Hub that works seamlessly on both desktop and mobile devices. Include smooth animations for menu transitions and ensure all navigation items are easily accessible.
+
+
+Tool: VS Code
+Model: Claude-3.5-Sonnet
+Prompt: Integrate Torre's API endpoints for fetching user profiles and job opportunities. Handle API responses gracefully with proper error handling and loading states throughout the application.
+
+Tool: VS Code
+Model: Claude-3.5-Sonnet
+Prompt: Suggest fixes for this error code returned on attempting to deploy to Vercel: Internal_Server_Error Code: Function_Invocation_Failed
+
+Tool: VS Code
+Model: Claude-3.5-Sonnet
+Prompt: On running the command "npm run build" on the frontend directory of my project, a frontend/dist folder was created but Vercel keeps returning this error: No Output Directory found after the build completed. You can configure the Output Directory in your Project Settings. Recommend fixes.
