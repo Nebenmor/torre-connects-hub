@@ -59,7 +59,7 @@ const API_BASE_URL =
   import.meta.env.VITE_API_URL ||
   (import.meta.env.DEV
     ? "http://localhost:3001"
-    : "https://torre-connects-hub.vercel.app");
+    : "https://torre-connects-hub-backend.vercel.app/");
 
 // API Service Layer
 class TorreApiService {
